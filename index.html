@@ -63,3 +63,109 @@ body {
 .weekdays, .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.weekdays div {
+  font-size: 12px;
+  color: var(--sub);
+  padding-bottom: 6px;
+}
+
+.days div {
+  padding: 8px 0;
+  border-radius: 50%;
+  font-size: 13px;
+  cursor: default;
+}
+
+.today {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.days div:hover {
+  background: var(--card);
+}
+
+.study {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--sub);
+}
+
+@keyframes fade {
+  from {opacity:0; transform:scale(.96)}
+  to {opacity:1; transform:scale(1)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="calendar">
+  <div class="header">
+    <button onclick="changeMonth(-1)">‹</button>
+    <div class="month" id="month"></div>
+    <button onclick="changeMonth(1)">›</button>
+  </div>
+
+  <div class="weekdays">
+    <div>Dom</div><div>Seg</div><div>Ter</div>
+    <div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
+  </div>
+
+  <div class="days" id="days"></div>
+
+  <div class="study">
+    📚 Planeje seus estudos por dia
+  </div>
+</div>
+
+<script>
+let date = new Date();
+
+function renderCalendar() {
+  const monthNames = [
+    "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+    "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
+  ];
+
+  document.getElementById("month").innerText =
+    monthNames[date.getMonth()] + " " + date.getFullYear();
+
+  const daysEl = document.getElementById("days");
+  daysEl.innerHTML = "";
+
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const today = new Date();
+
+  for (let i = 0; i < firstDay; i++) {
+    daysEl.innerHTML += "<div></div>";
+  }
+
+  for (let d = 1; d <= lastDate; d++) {
+    const isToday =
+      d === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
+
+    daysEl.innerHTML += `
+      <div class="${isToday ? "today" : ""}">
+        ${d}
+      </div>`;
+  }
+}
+
+function changeMonth(step) {
+  date.setMonth(date.getMonth() + step);
+  renderCalendar();
+}
+
+renderCalendar();
+</script>
+
+</body>
+</html>
